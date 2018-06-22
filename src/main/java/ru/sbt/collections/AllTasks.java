@@ -2,17 +2,10 @@ package ru.sbt.collections;
 
 
 import org.apache.commons.io.IOUtils;
-
-import javax.swing.text.html.HTMLDocument;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.function.Consumer;
-
-/**
- * Подсчитайте количество различных слов в файле.
- */
 class Comp implements Comparator<String> {
     @Override
     public int compare(String obj1, String obj2) {
@@ -51,16 +44,15 @@ public class AllTasks {
         String[] words = lines.split("[\\s\\.\\,\\(\\):;-]");
         Map<String, Integer> map = new HashMap<>();
         for (String st: words) {
-            if(map.containsKey(st))
-                map.put(st, map.get(st)+1);
-            else
-                map.put(st,1);
+            map.merge(st, 1, (oldVal, newVal) -> oldVal + newVal);
+//            if(map.containsKey(st))
+//                map.put(st, map.get(st)+1);
+//            else
+//                map.put(st,1);
         }
-        int sum=0;
         for (String st : map.keySet()) {
             System.out.println(st + " : " + map.get(st));
         }
-        System.out.println(sum);
     }
     public static void task4() throws IOException {
         //Задание 4: Выведите на экран все строки файла в обратном порядке.
@@ -86,9 +78,7 @@ public class AllTasks {
                     return array[index--];
                 }
             }
-
             String[] array;
-
             public Iterator<String> iterator() {
                 return new MyIterator();
             }
@@ -105,6 +95,7 @@ public class AllTasks {
         //Задание 6: Выведите на экран строки, номера которых задаются пользователем в произвольном порядке.
         String lines = getText();
         String[] strings = lines.split("\n");
+        String msgOutOfNounds = "Некорректный ввод! Введите число от 0 до " + Integer.toString(strings.length-1);
         Scanner in = new Scanner(System.in);
         System.out.println("Вводите номера строки, которые вам необходимы. Для завершения введите 'end'");
         String input;
@@ -117,7 +108,7 @@ public class AllTasks {
                 if(i>=0 & i<strings.length)
                     System.out.println(strings[i]);
                 else
-                    System.out.println("Некорректный ввод! Введите число от 0 до " + Integer.toString(strings.length-1));
+                    System.out.println(msgOutOfNounds);
             } catch (NumberFormatException e) {
                 System.out.println("Некорректный ввод! Введите целое число или end...");
             }
@@ -126,10 +117,11 @@ public class AllTasks {
     }
     public static void main(String[] args) throws IOException, URISyntaxException {
         //task1();
+
         //task2();
-        //task3();
+        task3();
         //task4();
         //task5();
-        task6();
+        //task6();
     }
 }
